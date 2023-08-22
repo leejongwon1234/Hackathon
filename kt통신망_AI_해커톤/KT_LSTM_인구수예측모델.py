@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Dropout
 def process_and_train(model, dataset, scaler=None, initial=False):
     data = pd.read_csv(dataset)
     X = data[features]
-    y = data['uenomax']
+    y = data['학습 TARGET으로 이용할 열 이름']
     
     # Standardize the data
     if initial:
@@ -48,7 +48,7 @@ def predict_for_dataset(model, scaler, dataset_name):
     return predictions
 
 # Features list
-features = ['erabaddatt', 'erabaddsucc', 'endcmodbysgnbatt', 'endcmodbysgnbsucc', 'nummsg3', 'endcaddatt', 'endcaddsucc', 'connestabatt', 'connestabsucc', 'endcmodbymenbatt', 'endcmodbymenbsucc', 'numrar', 'rachpreamblea', 'handoveratt', 'handoversucc', 'endcrelbymenb', 'totprbulavg', 'airmaculbyte', 'redirectiontolte_coverageout', 'totprbdlavg', 'rlculbyte']
+features = ['학습에 이용할 데이터 열 이름 리스트']
 
 time_steps = 432 #432 # 이틀
 
@@ -64,7 +64,7 @@ model.compile(optimizer='adam', loss='mse')
 
 # Train the model using datasets in sequence
 datasets = []
-for alphabet in ['A','E','D','C','G','H','I']:
+for alphabet in ['학습에 이용할 데이터 리스트']:
     datasets.append(f'./{alphabet}/{alphabet}_data.csv')
 
 initial = True
@@ -95,14 +95,14 @@ B_data = pd.read_csv('./B/B_data.csv')
 J_data = pd.read_csv('./J/J_data.csv')
 
 # Add the predictions to B_data and J_data
-B_data['uenomax'] = b_predictions
-J_data['uenomax'] = j_predictions
+B_data['학습 TARGET으로 이용할 열 이름'] = b_predictions
+J_data['학습 TARGET으로 이용할 열 이름'] = j_predictions
 
 # Save the updated datasets
 B_data.to_csv('B_data_with_predictions.csv', index=False)
 J_data.to_csv('J_data_with_predictions.csv', index=False)
 
-test_df = pd.read_csv("Q1_label_sample.csv")
+test_df = pd.read_csv('답을 입력할 CSV파일 이름')
 input_b_df = pd.read_csv("B_data_with_predictions.csv")
 input_j_df = pd.read_csv("J_data_with_predictions.csv")
 dates_to_remove = ['2023-06-12 18:15:00', '2023-07-05 04:30:00']
@@ -114,7 +114,7 @@ input_b_df = input_b_df.reset_index(drop=True)
 input_j_df = input_j_df.reset_index(drop=True)
 
 for i in range(len(input_b_df)):
-    test_df['BaseStationJ'][i] = input_j_df['uenomax'][i]
-    test_df['BaseStationB'][i] = input_b_df['uenomax'][i]
+    test_df['BaseStationJ'][i] = input_j_df['학습 TARGET으로 이용할 열 이름'][i]
+    test_df['BaseStationB'][i] = input_b_df['학습 TARGET으로 이용할 열 이름'][i]
 
-test_df.to_csv("output_5M_DM_432TS_30E_16BS_FX_20F.csv", index=False)
+test_df.to_csv("정답지 이름", index=False)
